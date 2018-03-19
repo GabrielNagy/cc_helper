@@ -11,6 +11,9 @@
       <a href="#contact">Contact</a>
       <a href="#about">About</a>
     </div>
+    {% for film in films %}
+    <h2>{{film.name}}</h2>
+    {% endfor %}
   </body>
 </html>
 
