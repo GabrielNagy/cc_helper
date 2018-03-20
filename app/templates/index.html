@@ -1,19 +1,33 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Movie helper</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
-  </head>
-  <body>
-    <div class="topnav">
-      <a class="active" href="#home">Home</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
-      <a href="#about">About</a>
-    </div>
-    {% for film in films %}
-    <h2>{{film.name}}</h2>
-    {% endfor %}
-  </body>
-</html>
+{% extends "bootstrap/base.html" %}
+{% block title %}CinemaCity Reservation Helper{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% endblock %}
 
+{% set navigation_bar = [
+    ('/', 'home', 'Home'),
+    ('/statistics', 'statistics', 'Statistics'),
+    ('/about', 'about', 'About')
+] %}
+
+{% block navbar %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">CinemaCity Helper</a>
+        </div>
+        <ul class="nav navbar-nav">
+          {% for href, id, title in navigation_bar %}
+          <li {% if id == active_page %}class="active"{% endif %}><a href="{{ href }}">{{ title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
+  </div>
+  {% endblock %}
+
+{% block content %}
+{% endblock %}

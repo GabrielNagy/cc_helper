@@ -1,11 +1,17 @@
 from flask import Flask, render_template, g
+from flask_bootstrap import Bootstrap
 import couchdbkit
 import requests
 import config
 from datetime import datetime
 
 app = Flask(__name__)
+Bootstrap(app)
 app.config.from_object(config)
+
+
+def get_day_as_id():
+    return datetime.now().strftime("%Y-%m-%d")
 
 
 def connect_db():
@@ -22,6 +28,7 @@ def init_db():
 @app.before_request
 def before_request():
     """Make sure we are connected to the database each request."""
+    app.jinja_env.cache = {}
     g.db = connect_db()
 
 
@@ -31,17 +38,29 @@ def teardown_request(exception):
 
 
 @app.route('/')
-def main_page():
-    current_day = datetime.now().strftime("%Y-%m-%d")
+@app.route('/date/<date>')
+def main_page(date=get_day_as_id()):
+    current_day = get_day_as_id()
+    if date == get_day_as_id():
+        current_time = datetime.now().strftime("%H:%M")
+    else:
+        current_time = 0
     try:
-        data = g.db.get(current_day)
+        data = g.db.view('parse_docs/get_showings', startkey=["{}".format(date)], endkey=["{}".format(date), {}])
     except couchdbkit.exceptions.ResourceNotFound:
-        r = requests.get('https://www.cinemacity.ro/ro/data-api-service/v1/quickbook/10107/film-events/in-cinema/1823/at-date/{}?attr=&lang=ro_RO'.format(current_day))
-        data = r.json()
-        data['_id'] = current_day
-        g.db.save_doc(data)
+        pass
 
-    return render_template('index.html')
+    return render_template('movies.html', movies=data, time=current_time)
+
+
+@app.route('/statistics')
+def statistics():
+    return render_template('statistics.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 if __name__ == "__main__":
