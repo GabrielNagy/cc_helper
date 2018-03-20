@@ -3,16 +3,16 @@
 {% block content %}
   <div class="panel-body">
     <ul class="list-group">
-    {% for movie in movies %}
-    {% if movie.value >= time %}
-    <li class="list-group-item">
-    <div class="row">
-      <div class="col-xs-4 text-left">{{movie.key[1]}}</div>
-      <div class="col-xs-4 text-right"><a href="https://www.cinemacity.ro{{movie.key[2]}}">{{movie.value}}</a></div>
-    </div>
-    </li>
-    {% endif %}
-    {% endfor %}
+      {% for movie in movies %}
+        {% if movie.value >= time %}
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-xs-4 text-left">{{movie.key[1]}}</div>
+              <div class="col-xs-4 text-right"><a href="https://www.cinemacity.ro{{movie.key[2]}}">{{movie.value}}</a></div>
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
     </ul>
   </div>
   <div class="panel-footer">

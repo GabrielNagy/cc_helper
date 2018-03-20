@@ -12,22 +12,22 @@
 ] %}
 
 {% block navbar %}
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">CinemaCity Helper</a>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">CinemaCity Helper</a>
+          </div>
+          <ul class="nav navbar-nav">
+            {% for href, id, title in navigation_bar %}
+              <li {% if id == active_page %}class="active"{% endif %}><a href="{{ href }}">{{ title }}</a></li>
+            {% endfor %}
+          </ul>
         </div>
-        <ul class="nav navbar-nav">
-          {% for href, id, title in navigation_bar %}
-          <li {% if id == active_page %}class="active"{% endif %}><a href="{{ href }}">{{ title }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-    </nav>
-  </div>
-  {% endblock %}
+      </nav>
+    </div>
+{% endblock %}
 
 {% block content %}
 {% endblock %}

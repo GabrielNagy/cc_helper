@@ -4,6 +4,8 @@ import couchdbkit
 import requests
 import config
 from datetime import datetime
+from htmlmin.main import minify
+
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -35,6 +37,20 @@ def before_request():
 @app.teardown_request
 def teardown_request(exception):
     """Closes the database at the end of the request."""
+
+
+@app.after_request
+def response_minify(response):
+    """
+    minify html response to decrease site traffic
+    """
+    if response.content_type == u'text/html; charset=utf-8':
+        response.set_data(
+            minify(response.get_data(as_text=True))
+        )
+
+        return response
+    return response
 
 
 @app.route('/')
