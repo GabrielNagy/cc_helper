@@ -27,6 +27,11 @@ def init_db():
     loader.sync(db, verbose=True)
 
 
+@app.errorhandler(410)
+def gone(e):
+    return render_template('410.html'), 410
+
+
 @app.before_request
 def before_request():
     """Make sure we are connected to the database each request."""
