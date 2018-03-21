@@ -3,19 +3,30 @@
 {% block content %}
   <div class="panel-body">
     <ul class="list-group">
-      {% for movie in movies %}
-        {% if movie.value >= time %}
-          <li class="list-group-item">
-            <div class="row">
-              <div class="col-xs-4 text-left">{{movie.key[1]}}</div>
-              <div class="col-xs-4 text-right"><a href="https://www.cinemacity.ro{{movie.key[2]}}">{{movie.value}}</a></div>
-            </div>
-          </li>
-        {% endif %}
-      {% endfor %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-xs-4 text-left">{% if prev_date >= current_date %}<a href="{{ url_for('main_page', date=prev_date) }}">{{ prev_date }}</a>{% endif %}</div>
+          <div class="col-xs-4 text-center"><em>Schedule for {{ date }}</em></div>
+          <div class="col-xs-4 text-right"><a href="{{ url_for('main_page', date=next_date) }}">{{ next_date }}</a></div>
+        </div>
+      </li>
     </ul>
   </div>
-  <div class="panel-footer">
-  </div>
+  <ul class="list-group">
+    {% for movie in movies %}
+      {% if movie.hour >= time %}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-xs-4 text-left"><strong>{{movie.title}}</strong></div>
+            <div class="col-xs-4 text-center">{% if movie.isImax %} imax |{% endif %}{% if movie.is4dx %} 4dx |{% endif %}{% if movie.dubbed %} dubbed |{% endif %} {{movie.tech}} | {{movie.length }}m | {{movie.rating}}</div>
+            <div class="col-xs-4 text-right pull-right"><a href="https://www.cinemacity.ro{{movie.link}}">{{movie.hour}}</a></div>
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+<div class="panel-footer">
+</div>
 </div>
 {% endblock %}

@@ -1,9 +1,9 @@
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, abort
 from flask_bootstrap import Bootstrap
 import couchdbkit
-import requests
 import config
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil import parser
 from htmlmin.main import minify
 
 
@@ -56,17 +56,21 @@ def response_minify(response):
 @app.route('/')
 @app.route('/date/<date>')
 def main_page(date=get_day_as_id()):
-    current_day = get_day_as_id()
-    if date == get_day_as_id():
+    current_date = get_day_as_id()
+    if date == current_date:
         current_time = datetime.now().strftime("%H:%M")
     else:
         current_time = 0
     try:
-        data = g.db.view('parse_docs/get_showings', startkey=["{}".format(date)], endkey=["{}".format(date), {}])
+        data = g.db.list('parse_docs/parse_categories', 'parse_docs/get_showings', startkey=["{}".format(date)], endkey=["{}".format(date), {}])
     except couchdbkit.exceptions.ResourceNotFound:
-        pass
+        abort(401)
 
-    return render_template('movies.html', movies=data, time=current_time)
+    if date < current_date:
+        abort(410)
+    next_date = datetime.strftime(parser.parse(date) + timedelta(days=1), "%Y-%m-%d")
+    prev_date = datetime.strftime(parser.parse(date) - timedelta(days=1), "%Y-%m-%d")
+    return render_template('movies.html', movies=data, time=current_time, current_date=current_date, date=date, next_date=next_date, prev_date=prev_date)
 
 
 @app.route('/statistics')
