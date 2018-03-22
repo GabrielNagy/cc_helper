@@ -16,6 +16,10 @@ def get_day_as_id():
     return datetime.now().strftime("%Y-%m-%d")
 
 
+def get_time_as_id():
+    return datetime.now().strftime("%H:%M")
+
+
 def connect_db():
     server = couchdbkit.Server(app.config['COUCHDB_URL'])
     return server.get_or_create_db(app.config['COUCHDB_DATABASE'])
@@ -60,14 +64,13 @@ def response_minify(response):
 
 @app.route('/')
 @app.route('/date/<date>')
-def main_page(date=get_day_as_id()):
+@app.route('/date/<date>/<time>')
+def main_page(date=get_day_as_id(), time=get_time_as_id()):
     current_date = get_day_as_id()
-    if date == current_date:
-        current_time = datetime.now().strftime("%H:%M")
-    else:
-        current_time = 0
+    if date != current_date:
+        time = "0"
     try:
-        data = g.db.list('parse_docs/parse_categories', 'parse_docs/get_showings', startkey=["{}".format(date)], endkey=["{}".format(date), {}])
+        data = g.db.list('parse_docs/parse_categories', 'parse_docs/get_showings', startkey=["{}".format(date), "{}".format(time)], endkey=["{}".format(date), {}])
     except couchdbkit.exceptions.ResourceNotFound:
         abort(401)
 
@@ -75,7 +78,7 @@ def main_page(date=get_day_as_id()):
         abort(410)
     next_date = datetime.strftime(parser.parse(date) + timedelta(days=1), "%Y-%m-%d")
     prev_date = datetime.strftime(parser.parse(date) - timedelta(days=1), "%Y-%m-%d")
-    return render_template('movies.html', movies=data, time=current_time, current_date=current_date, date=date, next_date=next_date, prev_date=prev_date)
+    return render_template('movies.html', movies=data, time=time, current_date=current_date, date=date, next_date=next_date, prev_date=prev_date)
 
 
 @app.route('/statistics')

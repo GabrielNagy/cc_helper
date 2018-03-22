@@ -2,5 +2,23 @@
 {% set active_page = "about" %}
 
 {% block content %}
-I made this.</div>
+  <div class="panel-body">
+    <h3>A hassle-free film reservation interface</h3>
+    <p>So, this site takes event data from CinemaCity's API (sorry guys), puts it through a blender that extracts the good bits (CouchDB), then basically prints them out (Flask).</p>
+    <h4>Features</h4>
+    <ul>
+      <li>you can open the reservation pages in a NEW TAB (WOW)</li>
+      <li>if you don't find nice seats, you can CLOSE the TAB and OPEN a NEW TAB at a different hour</li>
+      <li>you don't have to select the cinema every time you open the website</li>
+      <li>avoid loading unimportant data</li>
+    </ul>
+    <h4>For future development:</h4>
+    <ul>
+      <li>the ability to select the cinema (currently the app is tailored for Shopping City Timișoara</li>
+      <li>interesting statistics (once enough relevant data is collected, for now we have to make do with Timothée Chalamet)</li>
+      <li>automatic one-click reservations with Selenium or whatever technology one uses to make this stuff</li>
+      <li>make it prettier? don't know about that</li>
+    </ul>
+  </div>
+</div>
 {% endblock %}

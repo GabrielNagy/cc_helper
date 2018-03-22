@@ -14,19 +14,28 @@
   </div>
   <ul class="list-group">
     {% for movie in movies %}
-      {% if movie.hour >= time %}
+      {% if loop.index0 == 0 %}
         <li class="list-group-item">
           <div class="row">
             <div class="col-xs-4 text-left"><strong>{{movie.title}}</strong></div>
             <div class="col-xs-4 text-center">{% if movie.isImax %} imax |{% endif %}{% if movie.is4dx %} 4dx |{% endif %}{% if movie.dubbed %} dubbed |{% endif %} {{movie.tech}} | {{movie.length }}m | {{movie.rating}}</div>
-            <div class="col-xs-4 text-right pull-right"><a href="https://www.cinemacity.ro{{movie.link}}">{{movie.hour}}</a></div>
-          </div>
-        </li>
+            <div class="col-xs-4 text-right pull-right"><a href="https://www.cinemacity.ro{{movie.link}}">{{movie.hour}}</a>
+          {% else %}
+            {% if movies[loop.index0].title == movies[loop.index0-1].title and movies[loop.index0].isImax == movies[loop.index0-1].isImax and movies[loop.index0].is4dx == movies[loop.index0-1].is4dx and movies[loop.index0].tech == movies[loop.index0-1].tech %}
+              <a href="https://www.cinemacity.ro{{movie.link}}">{{movie.hour}}</a>
+            {% else %}
+        </div></div></li>
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xs-4 text-left"><strong>{{movie.title}}</strong></div>
+        <div class="col-xs-4 text-center">{% if movie.isImax %} imax |{% endif %}{% if movie.is4dx %} 4dx |{% endif %}{% if movie.dubbed %} dubbed |{% endif %} {{movie.tech}} | {{movie.length }}m | {{movie.rating}}</div>
+        <div class="col-xs-4 text-right pull-right"><a href="https://www.cinemacity.ro{{movie.link}}">{{movie.hour}}</a>
       {% endif %}
-    {% endfor %}
+    {% endif %}
+  {% endfor %}
   </ul>
-</div>
-<div class="panel-footer">
-</div>
-</div>
+  </div>
+  <div class="panel-footer">
+  </div>
+  </div>
 {% endblock %}
