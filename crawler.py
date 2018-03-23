@@ -23,9 +23,9 @@ if __name__ == "__main__":
             logger.info("Found date " + parsed_date + " in db.")
             # if date found in db, check for equality with api data
             # only replace films because events disappear as time passes and we tend to lose useful data
-            if api_data['body'] != db_data['body'] and len(api_data['body']['films']) != 0 and parsed_date != datetime.now().strftime("%Y-%m-%d"):
+            if api_data['body'] != db_data['body'] and parsed_date != datetime.now().strftime("%Y-%m-%d"):
                 logger.warning("API data different from DB data. Overwriting with newer data.")
-                db_data['body']['films'] = api_data['body']['films']
+                db_data['body'] = api_data['body']
                 db[parsed_date] = db_data
             else:
                 logger.info("API data equal to DB data. Not changing anything.")
