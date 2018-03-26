@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, abort
+from flask import Flask, render_template, g, abort, request
 from flask_bootstrap import Bootstrap
 import couchdbkit
 import config
@@ -63,11 +63,11 @@ def response_minify(response):
 
 
 @app.route('/')
-@app.route('/date/<date>')
-@app.route('/date/<date>/<time>')
-def main_page(date=get_day_as_id(), time=get_time_as_id()):
+def main_page():
+    date = request.args.get('date', get_day_as_id())
+    time = request.args.get('time', get_time_as_id())
     current_date = get_day_as_id()
-    if date != current_date:
+    if date != current_date and not request.args.get('time'):
         time = "0"
     try:
         data = g.db.list('parse_docs/parse_categories', 'parse_docs/get_showings', startkey=["{}".format(date), "{}".format(time)], endkey=["{}".format(date), {}])
