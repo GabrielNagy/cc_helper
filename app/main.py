@@ -70,10 +70,10 @@ def main_page():
     if date != current_date and not request.args.get('time'):
         time = "0"
     try:
-        data = g.db.list('parse_docs/parse_categories', 'parse_docs/get_showings', startkey=["{}".format(date), "{}".format(time)], endkey=["{}".format(date), {}])
+        day_object = g.db.get(date)
     except couchdbkit.exceptions.ResourceNotFound:
-        abort(401)
-
+        abort(404)
+    data = g.db.list('parse_docs/parse_categories', 'parse_docs/get_showings', startkey=["{}".format(date), "{}".format(time)], endkey=["{}".format(date), {}])
     if date < current_date:
         abort(410)
     next_date = datetime.strftime(parser.parse(date) + timedelta(days=1), "%Y-%m-%d")

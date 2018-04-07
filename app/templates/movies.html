@@ -13,6 +13,13 @@
     </ul>
   </div>
   <ul class="list-group">
+    {% if not movies %}
+      <li class="list-group-item">
+        <div class="row">
+            <div class="text-center"><strong>Sorry. Nothing more for today.</strong></div>
+        </div>
+      </li>
+    {% endif %}
     {% for movie in movies %}
       {% if loop.index0 == 0 %}
         <li class="list-group-item">
